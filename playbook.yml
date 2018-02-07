@@ -1,0 +1,7 @@
+---
+- name: Deploy Mysql
+  hosts: database 
+  gather_facts: false
+  become: true
+  roles:
+    - sysdev.mysql
