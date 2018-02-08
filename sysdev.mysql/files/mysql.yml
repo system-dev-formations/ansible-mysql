@@ -1,5 +1,0 @@
----
-- hosts: mysql-servers
-  become: true
-  roles:
-    - clusterfrak.mysql

@@ -5,23 +5,24 @@
   with_items:
     - epel-release
 
-- name: adding mysql/mariadb packages
-  package: name={{item}} state=installed
-  with_items:
-    - mariadb-server
-    - MySQL-python 
+- name: Get mysql community edition
+  yum:  name=http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+        state=present
 
-- name: start mariadb
-  service: name=mysqld state=started enabled=yes
+- name: install mysql CE 
+  yum: name=mysql-server state=present
 
-- name: Generate new root password
-  command: openssl rand -hex 7 creates=/root/.my.cnf
-  register: mysql_new_root_pass
+- name: install MySql-Python
+  yum: name=MySQL-python state=present
 
+
+- name: start mysql CE
+  service: name=mysqld  state=started 
+  
 - name: set the root password
   mysql_user: name=root host="{{item}}"
-              password={{ mysql_new_root_pass.stdout }}
-              priv=*.*:ALL,GRANT
+              password={{ mysql_root_pass }}
+              priv='*.*:ALL,GRANT'
               login_user=root
               login_password=""
               state=present
@@ -30,34 +31,16 @@
     - localhost
     - 127.0.0.1
     - ::1
+  ignore_errors: yes
 
-- name: write the index file
+- name: write .my.cnf file in root directory 
   template: src=my.cnf.j2 dest=/root/.my.cnf mode=0600
-
-- name: Output new root password
-  debug: msg="New root password is {{ mysql_new_root_pass.stdout }} "
-  when: mysql_new_root_pass.changed
 
 
 - name: Remove anonymous users
   mysql_user: name="" state=absent
-  when:  mysql_new_root_pass.changed
   ignore_errors: yes
 
 - name: Remove test database 
   mysql_db: name=test state=absent
-  when: mysql_new_root_pass.changed
   ignore_errors: yes
-
-
-- name: set bind-address to default ipv4 in my.conf file
-  lineinfile: dest=/etc/my.cnf line=bind-address={{ansible_default_ipv4.address}} state=present insertafter='^\[mysqld\]'
-  notify: restart mysql
-
-#- name: configuring firewall services
-#  firewalld: service={{item}} permanent=true state=enabled
-#  with_items:
-#    - mysql
-
-#- name: reloading the firewall
-#  command: firewall-cmd --reload
