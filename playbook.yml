@@ -1,7 +1,7 @@
 ---
 - name: Deploy Mysql
-  hosts: database 
-  gather_facts: false
+  hosts:  localhost 
   become: true
   roles:
     - sysdev.mysql
+    - sysdev.httpd

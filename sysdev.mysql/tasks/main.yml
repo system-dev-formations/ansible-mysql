@@ -27,7 +27,7 @@
               login_password=""
               state=present
   with_items:
-    - "{{inventory_hostname}}"
+    - "{{ ansible_default_ipv4.address }}"
     - localhost
     - 127.0.0.1
     - ::1
