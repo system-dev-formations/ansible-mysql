@@ -1,7 +1,8 @@
 ---
 - name: Deploy Mysql
-  hosts:  localhost 
+  hosts:  database 
   become: true
   roles:
     - sysdev.mysql
     - sysdev.httpd
+    - sysdev.wordpress

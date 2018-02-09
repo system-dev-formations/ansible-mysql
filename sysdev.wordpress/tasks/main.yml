@@ -1,5 +1,14 @@
 ---
 # tasks file for sysdev.wordpress
+# 
+
+- name: Create wordpress database
+  mysql_db:  name=wordpress state=present
+
+- name: Create a wordpress user 
+  mysql_user:  name=wordpress password="{{ password_here }}"
+               priv='*.*:ALL,GRANT'
+               state=present
 
 - name: install php for wordpress
   yum:  name={{item}} state=present 

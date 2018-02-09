@@ -1,8 +1,8 @@
 ---
 # vars file for sysdev.wordpress
 database_name_here:  wordpress
-username_name_here: wordpress
+username_here: wordpress
 password_here:  12345678
-dbhost_here: {{ ansible_default_ipv4.address }}
+dbhost_here: localhost 
 
 
