@@ -1,8 +1,9 @@
 ---
-- name: Deploy Mysql
+- name: Deploy Mysql/Httpd/Wordpress
   hosts:  database 
   become: true
   roles:
-    - sysdev.mysql
-    - sysdev.httpd
-    - sysdev.wordpress
+    - { role:  sysdev.mysql, tags: mysql }
+    - { role:  sysdev.httpd, tags: web }
+    - { role:  sysdev.wordpress, tags: wordpress }
+
