@@ -17,6 +17,7 @@
 
 - name: start mysql CE
   service: name=mysqld  state=started 
+  ignore_errors: yes
   
 - name: set the root password
   mysql_user: name=root host="{{item}}"
