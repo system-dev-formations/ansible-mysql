@@ -15,7 +15,6 @@
 - name: install MySql-Python
   yum: name=MySQL-python state=present
 
-
 - name: start mysql CE
   service: name=mysqld  state=started 
   
@@ -29,13 +28,19 @@
   with_items:
     - "{{ ansible_default_ipv4.address }}"
     - localhost
-    - 127.0.0.1
-    - ::1
+    #- 127.0.0.1
+    #- ::1
   ignore_errors: yes
+
+- name: affichage mot de passe
+  debug:
+     msg: " MOT: {{ mysql_root_pass }} "
+
 
 - name: write .my.cnf file in root directory 
   template: src=my.cnf.j2 dest=/root/.my.cnf mode=0600
-
+  notify:
+    - mysql restart
 
 - name: Remove anonymous users
   mysql_user: name="" state=absent
