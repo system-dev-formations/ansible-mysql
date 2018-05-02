@@ -1,6 +1,7 @@
 ---
 - name: Deploy Mysql/Httpd/Wordpress
-  hosts:   all 
+  hosts:   all
+  debugger: on_failed
   become: true
   roles:
     - { role:  sysdev.mysql, tags: mysql }
